@@ -3,6 +3,7 @@ package com.example.appsale12102022.data.repositories;
 import android.content.Context;
 
 import com.example.appsale12102022.data.remote.ApiService;
+import com.example.appsale12102022.data.remote.AppResource;
 import com.example.appsale12102022.data.remote.RetrofitClient;
 import com.example.appsale12102022.data.remote.dto.UserDTO;
 
@@ -20,7 +21,7 @@ public class AuthenticationRepository {
         apiService = RetrofitClient.getInstance(context).getApiService();
     }
 
-    public Call<UserDTO> signIn(String email, String password){
+    public Call<AppResource<UserDTO>> signIn(String email, String password){
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("email", email);
         hashMap.put("password", password);

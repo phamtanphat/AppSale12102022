@@ -1,37 +1,60 @@
 package com.example.appsale12102022.data.remote.dto;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class UserDTO {
-    private Integer result;
-    @SerializedName("data")
-    @Expose
-    private DataDTO dataDTO;
-    private String message;
 
-    public Integer getResult() {
-        return result;
+    private String email;
+    private String name;
+    private String phone;
+    private Integer userGroup;
+    private String registerDate;
+    private String token;
+
+    public String getEmail() {
+        return email;
     }
 
-    public void setResult(Integer result) {
-        this.result = result;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public DataDTO getData() {
-        return dataDTO;
+    public String getName() {
+        return name;
     }
 
-    public void setData(DataDTO dataDTO) {
-        this.dataDTO = dataDTO;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getMessage() {
-        return message;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Integer getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(Integer userGroup) {
+        this.userGroup = userGroup;
+    }
+
+    public String getRegisterDate() {
+        return registerDate;
+    }
+
+    public void setRegisterDate(String registerDate) {
+        this.registerDate = registerDate;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }
