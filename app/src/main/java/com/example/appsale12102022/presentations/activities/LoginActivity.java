@@ -6,7 +6,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +21,7 @@ import com.example.appsale12102022.data.remote.AppResource;
 import com.example.appsale12102022.data.remote.dto.UserDTO;
 import com.example.appsale12102022.databinding.ActivityLoginBinding;
 import com.example.appsale12102022.presentations.viewmodels.LoginViewModel;
+import com.example.appsale12102022.utils.SpannedUtil;
 import com.example.appsale12102022.utils.ValidationUtil;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
 
         initial();
         observerData();
+
+        setTextRegister();
 
         binding.signIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,5 +83,19 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setTextRegister() {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+        spannableStringBuilder.append("Don't have an account?");
+        spannableStringBuilder.append(SpannedUtil.setClickColorLink("Register", this, new SpannedUtil.OnListenClick() {
+            @Override
+            public void onClick() {
+                Toast.makeText(LoginActivity.this, "Click register", Toast.LENGTH_SHORT).show();
+            }
+        }));
+        binding.textViewRegister.setText(spannableStringBuilder);
+        binding.textViewRegister.setHighlightColor(Color.TRANSPARENT);
+        binding.textViewRegister.setMovementMethod(LinkMovementMethod.getInstance());
     }
 }

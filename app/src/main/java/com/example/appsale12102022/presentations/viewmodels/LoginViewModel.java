@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.appsale12102022.common.AppConstant;
+import com.example.appsale12102022.data.local.SharePrefApp;
 import com.example.appsale12102022.data.model.User;
 import com.example.appsale12102022.data.remote.AppResource;
 import com.example.appsale12102022.data.remote.dto.UserDTO;
@@ -24,11 +26,13 @@ import retrofit2.Response;
  * Created by pphat on 2/1/2023.
  */
 public class LoginViewModel extends ViewModel {
+    private Context context;
     private AuthenticationRepository authenticationRepository;
     private MutableLiveData<AppResource<User>> userResource = new MutableLiveData<>();
 
     public LoginViewModel(Context context) {
         authenticationRepository = new AuthenticationRepository(context);
+        this.context = context;
     }
 
     public LiveData<AppResource<User>> getUserResource() {
@@ -45,6 +49,10 @@ public class LoginViewModel extends ViewModel {
                             UserDTO userDTO = response.body().data;
                             User user = new User(userDTO.getEmail(), userDTO.getName(), userDTO.getPhone(), userDTO.getToken());
                             userResource.setValue(new AppResource.Success<>(user));
+
+                            if (!user.getToken().isEmpty()) {
+                                SharePrefApp.getInstance(context).saveDataString(AppConstant.KEY_TOKEN, user.getToken());
+                            }
                         } else {
                             if (response.errorBody() == null) return;
                             try {
