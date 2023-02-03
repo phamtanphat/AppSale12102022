@@ -15,4 +15,8 @@ public class ValidationUtil {
     public static boolean isValidPassword(String password) {
         return !password.isEmpty() && password.length() > 7;
     }
+
+    public static boolean isPhoneNumber(String phone) {
+        return !phone.isEmpty() && phone.length() > 9;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.appsale12102022.presentations.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -28,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
     LoginViewModel loginViewModel;
+    int REQUEST_CODE_REGISTER = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,11 +93,24 @@ public class LoginActivity extends AppCompatActivity {
         spannableStringBuilder.append(SpannedUtil.setClickColorLink("Register", this, new SpannedUtil.OnListenClick() {
             @Override
             public void onClick() {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_REGISTER);
             }
         }));
         binding.textViewRegister.setText(spannableStringBuilder);
         binding.textViewRegister.setHighlightColor(Color.TRANSPARENT);
         binding.textViewRegister.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_REGISTER && resultCode == RESULT_OK && data != null) {
+            String email = data.getStringExtra("email");
+            String password = data.getStringExtra("password");
+
+            binding.textEditEmail.setText(email);
+            binding.textEditPassword.setText(password);
+        }
     }
 }
