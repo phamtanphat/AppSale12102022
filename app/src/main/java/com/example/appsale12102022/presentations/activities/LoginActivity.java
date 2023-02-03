@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.appsale12102022.R;
+import com.example.appsale12102022.data.model.User;
 import com.example.appsale12102022.data.remote.AppResource;
 import com.example.appsale12102022.data.remote.dto.UserDTO;
 import com.example.appsale12102022.databinding.ActivityLoginBinding;
@@ -35,9 +36,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         }).get(LoginViewModel.class);
 
-        loginViewModel.getUserResource().observe(this, new Observer<AppResource<UserDTO>>() {
+        loginViewModel.getUserResource().observe(this, new Observer<AppResource<User>>() {
             @Override
-            public void onChanged(AppResource<UserDTO> userDTOAppResource) {
+            public void onChanged(AppResource<User> userDTOAppResource) {
                 switch (userDTOAppResource.status) {
                     case SUCCESS:
                         Log.d("BBB", "onSuccess " + userDTOAppResource.data.getEmail());
