@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         spannableStringBuilder.append(SpannedUtil.setClickColorLink("Register", this, new SpannedUtil.OnListenClick() {
             @Override
             public void onClick() {
-                Toast.makeText(LoginActivity.this, "Click register", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         }));
         binding.textViewRegister.setText(spannableStringBuilder);
