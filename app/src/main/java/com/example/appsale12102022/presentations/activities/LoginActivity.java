@@ -17,6 +17,7 @@ import com.example.appsale12102022.data.remote.AppResource;
 import com.example.appsale12102022.data.remote.dto.UserDTO;
 import com.example.appsale12102022.databinding.ActivityLoginBinding;
 import com.example.appsale12102022.presentations.viewmodels.LoginViewModel;
+import com.example.appsale12102022.utils.ValidationUtil;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,6 +29,25 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        initial();
+        observerData();
+
+        binding.signIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = binding.textEditEmail.getText().toString();
+                String password = binding.textEditPassword.getText().toString();
+
+                if (!ValidationUtil.isValidEmail(email) || !ValidationUtil.isValidPassword(password)) {
+                    Toast.makeText(LoginActivity.this, "Invalid account or password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                loginViewModel.signIn(email, password);
+            }
+        });
+    }
+
+    private void initial() {
         loginViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -35,24 +55,26 @@ public class LoginActivity extends AppCompatActivity {
                 return (T) new LoginViewModel(LoginActivity.this);
             }
         }).get(LoginViewModel.class);
+    }
 
+    private void observerData() {
         loginViewModel.getUserResource().observe(this, new Observer<AppResource<User>>() {
             @Override
-            public void onChanged(AppResource<User> userDTOAppResource) {
-                switch (userDTOAppResource.status) {
+            public void onChanged(AppResource<User> resource) {
+                switch (resource.status) {
                     case SUCCESS:
-                        Log.d("BBB", "onSuccess " + userDTOAppResource.data.getEmail());
+                        binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                         break;
                     case LOADING:
-                        Log.d("BBB", "onLoading ");
+                        binding.layoutLoading.layoutLoading.setVisibility(View.VISIBLE);
                         break;
                     case ERROR:
-                        Log.d("BBB", "onFail " + userDTOAppResource.message);
+                        binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, resource.message, Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
         });
-
-        loginViewModel.signIn("demo1210@gmail.com", "123456789");
     }
 }
