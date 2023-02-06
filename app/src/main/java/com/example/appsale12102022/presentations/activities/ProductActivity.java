@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.appsale12102022.R;
+import com.example.appsale12102022.data.model.Cart;
 import com.example.appsale12102022.data.model.Product;
 import com.example.appsale12102022.data.remote.AppResource;
 import com.example.appsale12102022.databinding.ActivityProductBinding;
@@ -39,6 +40,7 @@ public class ProductActivity extends AppCompatActivity {
         observerData();
 
         productViewModel.fetchListProducts();
+        productViewModel.fetchCart();
     }
 
     private void observerData() {
@@ -55,6 +57,32 @@ public class ProductActivity extends AppCompatActivity {
                         break;
                     case ERROR:
                         binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
+                        Toast.makeText(ProductActivity.this, resource.message, Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
+        productViewModel.getCartResource().observe(this, new Observer<AppResource<Cart>>() {
+            @Override
+            public void onChanged(AppResource<Cart> resource) {
+                if (resource == null) return;
+                switch (resource.status) {
+                    case SUCCESS:
+                        binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
+                        int quantity = 0;
+                        if (resource.data.getProductList() == null || resource.data.getProductList().isEmpty()) return;
+                        for (Product product: resource.data.getProductList()) {
+                            quantity += product.getQuantity();
+                        }
+                        setupBadge(quantity);
+                        break;
+                    case LOADING:
+                        binding.layoutLoading.layoutLoading.setVisibility(View.VISIBLE);
+                        break;
+                    case ERROR:
+                        binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
+                        setupBadge(0);
                         Toast.makeText(ProductActivity.this, resource.message, Toast.LENGTH_SHORT).show();
                         break;
                 }

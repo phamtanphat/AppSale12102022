@@ -74,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
                     case SUCCESS:
                         binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
                         Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, ProductActivity.class));
+                        finish();
                         break;
                     case LOADING:
                         binding.layoutLoading.layoutLoading.setVisibility(View.VISIBLE);
