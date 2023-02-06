@@ -14,6 +14,7 @@ import com.example.appsale12102022.R;
 import com.example.appsale12102022.data.model.Product;
 import com.example.appsale12102022.data.remote.AppResource;
 import com.example.appsale12102022.databinding.ActivityProductBinding;
+import com.example.appsale12102022.presentations.adapters.ProductAdapter;
 import com.example.appsale12102022.presentations.viewmodels.ProductViewModel;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ProductActivity extends AppCompatActivity {
 
     ActivityProductBinding binding;
     ProductViewModel productViewModel;
+    ProductAdapter productAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +42,14 @@ public class ProductActivity extends AppCompatActivity {
             public void onChanged(AppResource<List<Product>> resource) {
                 switch (resource.status) {
                     case SUCCESS:
-//                        binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
-                        Toast.makeText(ProductActivity.this, resource.data.size() + "", Toast.LENGTH_SHORT).show();
+                        binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
+                        productAdapter.updateListProduct(resource.data);
                         break;
                     case LOADING:
-//                        binding.layoutLoading.layoutLoading.setVisibility(View.VISIBLE);
+                        binding.layoutLoading.layoutLoading.setVisibility(View.VISIBLE);
                         break;
                     case ERROR:
-//                        binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
+                        binding.layoutLoading.layoutLoading.setVisibility(View.GONE);
                         Toast.makeText(ProductActivity.this, resource.message, Toast.LENGTH_SHORT).show();
                         break;
                 }
@@ -63,5 +65,9 @@ public class ProductActivity extends AppCompatActivity {
                 return (T) new ProductViewModel(ProductActivity.this);
             }
         }).get(ProductViewModel.class);
+
+        productAdapter = new ProductAdapter();
+        binding.recyclerViewProduct.setAdapter(productAdapter);
+        binding.recyclerViewProduct.setHasFixedSize(true);
     }
 }
