@@ -6,8 +6,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.appsale12102022.R;
@@ -24,6 +28,7 @@ public class ProductActivity extends AppCompatActivity {
     ActivityProductBinding binding;
     ProductViewModel productViewModel;
     ProductAdapter productAdapter;
+    TextView tvCountCart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,10 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     private void initial() {
+        // toolbar
+        setSupportActionBar(binding.toolbarHome);
+        getSupportActionBar().setTitle("Food");
+
         productViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -69,5 +78,34 @@ public class ProductActivity extends AppCompatActivity {
         productAdapter = new ProductAdapter();
         binding.recyclerViewProduct.setAdapter(productAdapter);
         binding.recyclerViewProduct.setHasFixedSize(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_product, menu);
+        final MenuItem menuItem = menu.findItem(R.id.item_menu_cart);
+        View actionView = menuItem.getActionView();
+        tvCountCart = actionView.findViewById(R.id.text_cart_badge);
+        setupBadge(0);
+        actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
+        return true;
+    }
+
+    private void setupBadge(int quantities) {
+        if (quantities == 0) {
+            tvCountCart.setVisibility(View.GONE);
+        } else {
+            tvCountCart.setVisibility(View.VISIBLE);
+            tvCountCart.setText(String.valueOf(Math.min(quantities, 99)));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_menu_cart:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
